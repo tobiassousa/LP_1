@@ -1,5 +1,7 @@
 package Animais;
 
+import java.util.Date;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -16,6 +18,17 @@ public class Animais {
     private String peso;
     private String idade;
     private String sexo;
+    
+    public Animais() {
+	}
+	    
+	public Animais(String nome, String peso, String idade, String sexo) {
+	       this.nome = nome;
+	       this.peso = peso;
+	       this.idade = idade;
+	       this.sexo = sexo;
+	
+	}
 
 public void setNome(String nome){
     this.nome = nome;

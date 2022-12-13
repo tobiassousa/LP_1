@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Animais.Animais;
+import Animais.Conexao;
+
 import java.awt.Color;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,11 +28,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.awt.event.ActionEvent;
+
 
 public class FormAnimais extends JFrame {
 
@@ -109,41 +117,37 @@ public class FormAnimais extends JFrame {
 		JButton Cadastrar1 = new JButton();
 		Cadastrar1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				Animais c1 = new Animais();
-	            c1.setNome(tfNome.getText());
-	            c1.setPeso(tfPeso.getText());
-	            c1.setIdade(tfIdade.getText());
-	            c1.setSexo(tfSexo.getText());
-	            x.add(c1);
-	            Animais.add(c1.getNome());
-	            Animais.add(c1.getPeso());
-	            Animais.add(c1.getIdade());
-	            Animais.add(c1.getSexo());
-	            
-	            
-	            for(Animais item: x) {
-	            	System.out.println("Lista");
-	    			System.out.printf("%s\n", item.toString());
-	    		}
-	       
-	            try{
-	            		
-	            FileWriter fw = new FileWriter("C:\\Users\\TI ADCe\\eclipse-workspace\\Animais\\src\\animals.csv", true);
-	               BufferedWriter bw = new BufferedWriter(fw);
-	               PrintWriter out = new PrintWriter(bw);
-				   StringBuilder sb = new StringBuilder();
-				   
-				   sb.append(tfNome.getText() + ";");
-				   sb.append(tfPeso.getText() + ";");
-				   sb.append(tfIdade.getText() + ";");
-				   sb.append(tfSexo.getText() + ";");
-				   bw.write(sb.toString() + "\n");
-				   bw.close();
-	            
-	        } catch (Exception e1){
-	            System.out.println("Erro !");
-	        }
-	           
+				c1.setNome(tfNome.getText());
+				c1.setPeso(tfPeso.getText());
+				c1.setIdade(tfIdade.getText());			
+				c1.setSexo(tfSexo.getText());
+							
+				
+				try {
+					Connection con = Conexao.faz_conexao();
+					String sql = "insert into animais(nome, peso, idade, sexo) values (?, ?, ?, ?)";
+					
+					PreparedStatement stmt = con.prepareStatement(sql);
+					stmt.setString(1, c1.getNome());
+					stmt.setString(2, c1.getPeso());
+					stmt.setString(3, c1.getIdade());
+					stmt.setString(4, c1.getSexo());
+					
+					
+				stmt.execute();
+				stmt.close();
+				con.close();
+				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso! Visualizando Vagas");
+
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Faltando informações obrigatórias!!");
+					
+				}
+				
 			}
 		});
 		Cadastrar1.setText("Cadastrar");
